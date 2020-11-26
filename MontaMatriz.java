@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MontaMatriz {
@@ -10,16 +12,17 @@ public class MontaMatriz {
     ArrayList<Character> portais;
     private char inicio;
     private char fim;
-    private int linhaInicio;
-    private int colunaInicio;
-    private int linhaFim;
-    private int colunaFim;
+    private int[] posicaoInicio;
+    private int[] posicaoFim;
+   
 
     public MontaMatriz(File f){
         linhas=contaLinhas(f);
         colunas=contaColunas(f);
         matriz= new char[linhas][colunas];
         portais=new ArrayList<Character>();
+        posicaoInicio= new int[2];
+        posicaoFim= new int[2];
         iniciaMatriz(f);
     }
 
@@ -29,6 +32,30 @@ public class MontaMatriz {
 
     public int getColunas(){
         return colunas;
+    }
+
+    public void getPortais(){
+        for (int i=0;i<portais.size();i++) {
+            System.out.print(portais.get(i)+" ");
+        }
+        System.out.println("comeca em: "+ (posicaoInicio[0] +1) +" "+ (posicaoInicio[1] +1));
+        System.out.println("termina em: "+ (posicaoFim[0] +1) +" "+ (posicaoFim[1] +1));
+
+    }
+    public char getCharNaMatriz(int linha,int coluna){
+        return matriz[linha][coluna];
+    }
+
+    public int[] getPosicaoInicio(){
+        return posicaoInicio;
+    }
+
+    public int[] getPosicaoFim(){
+        return posicaoFim;
+    }
+
+    public char[][] getMatriz(){
+        return matriz;
     }
 
     private int contaColunas(File f) {
@@ -86,21 +113,21 @@ public class MontaMatriz {
                         portais.add(matriz[i][j]);
                     }
                     if(j==0&&c==inicio){
-                        linhaInicio=i;
-                        colunaInicio=j;
+                        posicaoInicio[0]=i;
+                        posicaoInicio[1]=j;
                     }else if(j==colunas-1&&c==inicio){
-                        linhaInicio=i;
-                        colunaInicio=j;
+                        posicaoInicio[0]=i;
+                        posicaoInicio[1]=j;
                     }else if(i==0&&c==inicio){
-                        linhaInicio=i;
-                        colunaInicio=j;
+                        posicaoInicio[0]=i;
+                        posicaoInicio[1]=j;
                     }else if(i==linhas-1&&c==inicio){
-                        linhaInicio=i;
-                        colunaInicio=j;
+                        posicaoInicio[0]=i;
+                        posicaoInicio[1]=j;
                     }
                     else if(j!=0&&j!=colunas-1&&i!=0&&i!=linhas-1&&c==fim){
-                        linhaFim=i;
-                        colunaFim=j;
+                        posicaoFim[0]=i;
+                        posicaoFim[1]=j;
                     }
 
 
@@ -113,17 +140,10 @@ public class MontaMatriz {
             e.printStackTrace();
         } 
 
-    }
-
-    public void getPortais(){
-        for (int i=0;i<portais.size();i++) {
-            System.out.print(portais.get(i)+" ");
-        }
-        System.out.println("comeca em: "+ (linhaInicio +1) +" "+ (colunaInicio+1));
-        System.out.println("termina em: "+ (linhaFim +1) +" "+ (colunaFim+1));
 
     }
-    
+
+  
     public String toString() {
         String msg="";
         for(int i=0; i<linhas;i++){
